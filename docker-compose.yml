@@ -1,0 +1,19 @@
+services:
+  credits-api:
+    build: .
+    image: credits-api:latest
+    ports:
+      - "8000:8000"
+    environment:
+      DB_PATH: /data/credits.db
+    volumes:
+      - credits-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  credits-data:
